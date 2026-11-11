@@ -1,0 +1,5 @@
+Known_Actor_Attacks = 
+CALCULATE(
+    COUNTROWS('Fact_Security_Events'),
+    'Dim_Threat_Intel'[threat_actor_group] <> "Unknown Actor"
+)

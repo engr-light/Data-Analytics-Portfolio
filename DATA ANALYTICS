@@ -17,3 +17,10 @@ WITH LoginSequences AS (
         ) AS next_status
     FROM auth_logs
 )
+
+## 3. Data Modeling & DAX
+Known_Actor_Attacks = 
+CALCULATE(
+    COUNTROWS('Fact_Security_Events'),
+    'Dim_Threat_Intel'[threat_actor_group] <> "Unknown Actor"
+)
