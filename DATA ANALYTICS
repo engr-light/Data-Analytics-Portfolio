@@ -24,3 +24,16 @@ CALCULATE(
     COUNTROWS('Fact_Security_Events'),
     'Dim_Threat_Intel'[threat_actor_group] <> "Unknown Actor"
 )
+
+## 4. Serverless Data Lake (Athena & S3)
+Athena uses a "schema on-read" approach via Apache Hive DDL, allowing us to query logs directly from S3 without expensive database compute.
+
+**Hive DDL Syntax for CloudTrail JSON:**
+```sql
+CREATE EXTERNAL TABLE cloudtrail_logs (
+    event_time STRING,
+    user_identity STRING,
+    source_ip STRING
+)
+ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+LOCATION 's3://soc-telemetry-archive-el/';
