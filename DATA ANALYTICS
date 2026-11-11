@@ -1,0 +1,19 @@
+# Cloud Security Data Analytics Portfolio
+
+## 1. Advanced SQL: JSON Extraction for Cloud Telemetry
+In cloud environments (like AWS CloudTrail), telemetry is often nested in JSON payloads. To bypass computationally heavy self-joins when hunting for brute-force attacks, we use Window Functions combined with JSON extraction.
+
+**PostgreSQL Syntax:**
+```sql
+WITH LoginSequences AS (
+    SELECT 
+        user_identity,
+        request_parameters::json->>'ip_address' AS extracted_ip,
+        event_time,
+        login_status,
+        LEAD(login_status, 1) OVER(
+            PARTITION BY user_identity, request_parameters::json->>'ip_address'
+            ORDER BY event_time
+        ) AS next_status
+    FROM auth_logs
+)
